@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Random Redirect</title>
+    <script>
+        // Get the participant ID from the query string
+        const queryParams = new URLSearchParams(window.location.search);
+        const participantId = queryParams.get('participant');
+
+        if (participantId) {
+            // Define the experiment URLs and their corresponding weights
+            const urls = [
+                { url: `https://run.pavlovia.org/DStephenLindsay/sapp_1/?participant=${participantId}`, weight: 0.4 },
+                { url: `https://run.pavlovia.org/DStephenLindsay/sapp_2/?participant=${participantId}`, weight: 0.6 }
+            ];
+
+            // Create a weighted random selection
+            const random = Math.random();
+            let cumulativeWeight = 0;
+            let selectedUrl = "";
+
+            for (const { url, weight } of urls) {
+                cumulativeWeight += weight;
+                if (random < cumulativeWeight) {
+                    selectedUrl = url;
+                    break;
+                }
+            }
+
+            // Redirect to the selected URL
+            window.location.href = selectedUrl;
+        } else {
+            // Show an error message if the participant ID is missing
+            document.body.innerHTML = "<p>Participant ID not found. Please contact the researcher.</p>";
+        }
+    </script>
+</head>
+<body>
+    <p>Redirecting you to the experiment...</p>
+</body>
+</html>
